@@ -82,3 +82,34 @@ jobs:
           asset_path: ./hamonize-connect_1.0.1_amd64.deb
           asset_name: hamonize-connect_1.0.1_amd64.deb
           asset_content_type: application/deb
+
+  build-connector-win:
+    name: Build Hamonize-connector-win
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [10.x]
+    steps:
+      - uses: actions/checkout@v2
+          
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          
+      - name: Install dependencies
+        run: sudo apt-get update -qq && sudo apt-get install debhelper npm
+        
+      - name: Build
+        run: cd hamonize-connector/ && sudo dpkg-buildpackage -b -us -uc -ui
+          
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ jobs.build-agent.steps.create_release.outputs.upload_url }}
+          asset_path: ./hamonize-connect_1.0.1_amd64.deb
+          asset_name: hamonize-connect_1.0.1_amd64.deb
+          asset_content_type: application/deb
