@@ -23,6 +23,7 @@ jobs:
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          UPLOAD_URL: ${{ steps.create_release.outputs.upload_url }}
         with:
           tag_name: ${{ steps.tag_version.outputs.new_tag }}
           release_name: Hamonize ${{ steps.tag_version.outputs.new_tag }}
@@ -47,7 +48,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{ env.UPLOAD_URL }}
           asset_path: ./hamonize-agent_1.0.1_amd64.deb
           asset_name: hamonize-agent_1.0.1_amd64.deb
           asset_content_type: application/deb
@@ -78,7 +79,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ build-agent.steps.create_release.outputs.upload_url }}
+          upload_url: ${{ env.UPLOAD_URL }}
           asset_path: ./hamonize-connect_1.0.1_amd64.deb
           asset_name: hamonize-connect_1.0.1_amd64.deb
           asset_content_type: application/deb
@@ -109,7 +110,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ build-agent.steps.create_release.outputs.upload_url }}
+          upload_url: ${{ env.UPLOAD_URL }}
           asset_path: ./hamonize-connector-window/dist/'hamonize-connect Setup 1.0.6.exe'
           asset_name: 'hamonize-connect Setup 1.0.6.exe'
           asset_content_type: application/exe
