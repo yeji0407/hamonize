@@ -2,7 +2,7 @@ name: Hamonize CI
 on:
   push:
     branches: [ master ]
-jobs:
+jobs:          
   build-agent:
     name: Build Hamonize-agent
     runs-on: ubuntu-latest
@@ -23,7 +23,6 @@ jobs:
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          UPLOAD_URL: ${{ steps.create_release.outputs.upload_url }}
         with:
           tag_name: ${{ steps.tag_version.outputs.new_tag }}
           release_name: Hamonize ${{ steps.tag_version.outputs.new_tag }}
@@ -48,7 +47,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ env.UPLOAD_URL }}
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./hamonize-agent_1.0.1_amd64.deb
           asset_name: hamonize-agent_1.0.1_amd64.deb
           asset_content_type: application/deb
@@ -72,6 +71,22 @@ jobs:
         
       - name: Build
         run: cd hamonize-connector/ && sudo dpkg-buildpackage -b -us -uc -ui
+      
+      - name: Get latest release
+        id: get_latest_release
+        with:
+          route: GET /repos/:repository/release/latest
+          repository: ${{ github.repository }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Get upload url
+        id: get_upload_url
+        run: |
+          url=$$(echo "$response" | jq -r '.upload_url')
+          echo "::set-output name=url::$url"
+        env:
+          response: ${{ steps.get_latest_release.outputs.data }}
           
       - name: Upload Release Asset
         id: upload-release-asset
@@ -79,38 +94,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ env.UPLOAD_URL }}
+          upload_url: ${{ steps.get_upload_url.outputs.url }}
           asset_path: ./hamonize-connect_1.0.1_amd64.deb
           asset_name: hamonize-connect_1.0.1_amd64.deb
           asset_content_type: application/deb
-
-  build-connector-win:
-    name: Build Hamonize-connector-win
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [10.x]
-    steps:
-      - uses: actions/checkout@v2
-          
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          
-      - name: Install dependencies
-        run: sudo apt-get update -qq && sudo apt-get install debhelper npm
-        
-      - name: Build
-        run: cd hamonize-connector-window && npm install && npm run build:win
-
-      - name: Upload Release Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ env.UPLOAD_URL }}
-          asset_path: ./hamonize-connector-window/dist/'hamonize-connect Setup 1.0.6.exe'
-          asset_name: 'hamonize-connect Setup 1.0.6.exe'
-          asset_content_type: application/exe
