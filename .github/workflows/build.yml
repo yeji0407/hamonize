@@ -12,17 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          
-      - name: Install dependencies
-        run: sudo apt-get update -qq && sudo apt-get install debhelper npm
-        
-      - name: Build
-        run: cd hamonize-agent/ && sudo dpkg-buildpackage -b -us -uc -ui
-        
       - name: Bump version and push tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v5.5
@@ -36,10 +25,21 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ steps.tag_version.outputs.new_tag }}
-          release_name: Release ${{ steps.tag_version.outputs.new_tag }}
+          release_name: Hamonize ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
           draft: false
           prerelease: false
+          
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          
+      - name: Install dependencies
+        run: sudo apt-get update -qq && sudo apt-get install debhelper npm
+        
+      - name: Build
+        run: cd hamonize-agent/ && sudo dpkg-buildpackage -b -us -uc -ui
           
       - name: Upload Release Asset
         id: upload-release-asset
@@ -52,3 +52,33 @@ jobs:
           asset_name: hamonize-agent_1.0.1_amd64.deb
           asset_content_type: application/deb
       
+  build-connector:
+    name: Build Hamonize-connector
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [10.x]
+    steps:
+      - uses: actions/checkout@v2
+          
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          
+      - name: Install dependencies
+        run: sudo apt-get update -qq && sudo apt-get install debhelper npm
+        
+      - name: Build
+        run: cd hamonize-connector/ && sudo dpkg-buildpackage -b -us -uc -ui
+          
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./hamonize-connect_1.0.1_amd64.deb
+          asset_name: hamonize-connect_1.0.1_amd64.deb
+          asset_content_type: application/deb
