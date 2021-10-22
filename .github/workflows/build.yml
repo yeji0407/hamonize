@@ -48,7 +48,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./hamonize-agent*.deb
-          asset_name: hamonize-agent*.deb
+          asset_path: ./hamonize-agent_1.0.1_amd64.deb
+          asset_name: hamonize-agent_1.0.1_amd64.deb
           asset_content_type: application/deb
       
