@@ -22,7 +22,6 @@ jobs:
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: hamonize-agent
           path: {{ github.workspace }}/hamonize-agent*.deb
       
   # build-linux:
