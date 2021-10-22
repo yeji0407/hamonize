@@ -73,6 +73,7 @@ jobs:
         run: cd hamonize-connector/ && sudo dpkg-buildpackage -b -us -uc -ui
       
       - name: Get latest release
+        uses: octokit/request-action@v2.x
         id: get_latest_release
         with:
           route: GET /repos/:repository/release/latest
