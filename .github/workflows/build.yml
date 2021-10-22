@@ -72,22 +72,28 @@ jobs:
       - name: Build
         run: cd hamonize-connector/ && sudo dpkg-buildpackage -b -us -uc -ui
       
-      - name: Get latest release
-        uses: octokit/request-action@v2.x
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v5.5
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - uses: octokit/request-action@v2.x
         id: get_latest_release
         with:
-          route: GET /repos/:repository/release/latest
+          route: GET /repos/:repository/releases/${{ steps.tag_version.outputs.tag }}
           repository: ${{ github.repository }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
-      - name: Get upload url
+      - name: get upload url
         id: get_upload_url
         run: |
-          url=$$(echo "$response" | jq -r '.upload_url')
+          url=$(echo "$response" | jq -r '.upload_url')
           echo "::set-output name=url::$url"
-        env:
-          response: ${{ steps.get_latest_release.outputs.data }}
+        env: 
+          response:  ${{ steps.get_latest_release.outputs.data }}
+          
           
       - name: Upload Release Asset
         id: upload-release-asset
