@@ -18,34 +18,59 @@ jobs:
 
       - run: ls -R
   
-#       - name: Bump version and push tag
-#         id: tag_version
-#         uses: mathieudutour/github-tag-action@v5.5
-#         with:
-#           github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v5.5
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           
-#       - name: Create Release
-#         id: create_release
-#         uses: actions/create-release@v1
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#         with:
-#           tag_name: ${{ steps.tag_version.outputs.new_tag }}
-#           release_name: Hamonize ${{ steps.tag_version.outputs.new_tag }}
-#           body: ${{ steps.tag_version.outputs.changelog }}
-#           draft: false
-#           prerelease: false
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.tag_version.outputs.new_tag }}
+          release_name: Hamonize ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
+          draft: false
+          prerelease: false
           
-#       - name: Rename Package
-#         run: mv ./hamonize-agent*.deb ./hamonize-agent_${{ steps.tag_version.outputs.new_tag }}_amd64.deb
+      - name: Rename Package
+        run: |
+            mv ./hamonize-agent/hamonize-agent*.deb ./hamonize-agent_${{ steps.tag_version.outputs.new_tag }}_amd64.deb
+            mv ./hamonize-connect/hamonize-connect*.deb ./hamonize-connect_${{ steps.tag_version.outputs.new_tag }}_amd64.deb
+            mv ./hamonize-admin/hamonize-admin*.deb ./hamonize-admin_${{ steps.tag_version.outputs.new_tag }}_amd64.deb
           
-#       - name: Upload Release Asset Agent
-#         id: upload-release-asset-agent
-#         uses: actions/upload-release-asset@v1
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#         with:
-#           upload_url: ${{ steps.create_release.outputs.upload_url }}
-#           asset_path: ./hamonize-agent_${{ steps.tag_version.outputs.new_tag }}_amd64.deb
-#           asset_name: hamonize-agent_${{ steps.tag_version.outputs.new_tag }}_amd64.deb
-#           asset_content_type: application/deb
+      - name: Upload Release Asset Agent
+        id: upload-release-asset-agent
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./hamonize-agent_${{ steps.tag_version.outputs.new_tag }}_amd64.deb
+          asset_name: hamonize-agent_${{ steps.tag_version.outputs.new_tag }}_amd64.deb
+          asset_content_type: application/deb
+          
+      - name: Upload Release Asset Connect
+        id: upload-release-asset-connect
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./hamonize-connect_${{ steps.tag_version.outputs.new_tag }}_amd64.deb
+          asset_name: hamonize-connect_${{ steps.tag_version.outputs.new_tag }}_amd64.deb
+          asset_content_type: application/deb
+          
+      - name: Upload Release Asset Admin
+        id: upload-release-asset-admin
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./hamonize-admin_${{ steps.tag_version.outputs.new_tag }}_amd64.deb
+          asset_name: hamonize-admin_${{ steps.tag_version.outputs.new_tag }}_amd64.deb
+          asset_content_type: application/deb
