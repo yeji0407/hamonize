@@ -61,6 +61,9 @@ jobs:
       - name: Build Hamonize-connect
         run: cd hamonize-connector/ && sudo dpkg-buildpackage -b -us -uc -ui
         
+      - name: Rename Package
+        run: mv ./hamonize-connect*.deb ./hamonize-connect_${{ steps.tag_version.outputs.new_tag }}_amd64.deb
+        
       - name: Upload Release Asset Connector
         id: upload-release-asset-connector
         uses: actions/upload-release-asset@v1
@@ -68,8 +71,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./hamonize-connect_1.0.1_amd64.deb
-          asset_name: hamonize-connect_1.0.1_amd64.deb
+          asset_path: ./hamonize-connect_${{ steps.tag_version.outputs.new_tag }}_amd64.deb
+          asset_name: hamonize-connect_${{ steps.tag_version.outputs.new_tag }}_amd64.deb
           asset_content_type: application/deb
           
       - name: Install dependencies
