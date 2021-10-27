@@ -1,4 +1,4 @@
-name: Hamonize CI
+name: Upload Hamonize packages
 on:
   workflow_run:
     workflows: ["Hamonize CI"]
