@@ -13,9 +13,8 @@ jobs:
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v2
-        with:
-          name: hamonize-agent
-          path: hamonize_agent*.deb
+
+      - run: unzip hamonize-agent
   
       - name: Bump version and push tag
         id: tag_version
