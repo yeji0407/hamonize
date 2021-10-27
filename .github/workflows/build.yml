@@ -3,8 +3,8 @@ on:
   push:
     branches: [ master ]
 jobs:          
-  build-agent:
-    name: Build Hamonize-agent
+  build:
+    name: Build Hamonize
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -38,11 +38,11 @@ jobs:
       - name: Install dependencies
         run: sudo apt-get update -qq && sudo apt-get install debhelper npm
         
-      - name: Build
+      - name: Build Hamonize-agent
         run: cd hamonize-agent/ && sudo dpkg-buildpackage -b -us -uc -ui
           
-      - name: Upload Release Asset
-        id: upload-release-asset
+      - name: Upload Release Asset Agent
+        id: upload-release-asset-agent
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -51,57 +51,18 @@ jobs:
           asset_path: ./hamonize-agent_1.0.1_amd64.deb
           asset_name: hamonize-agent_1.0.1_amd64.deb
           asset_content_type: application/deb
-      
-  build-connector:
-    name: Build Hamonize-connector
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [10.x]
-    steps:
-      - uses: actions/checkout@v2
-          
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          
-      - name: Install dependencies
-        run: sudo apt-get update -qq && sudo apt-get install debhelper npm
+              
+      - name: Build Hamonize-connect
+        run: cd hamonize-connect/ && sudo dpkg-buildpackage -b -us -uc -ui
         
-      - name: Build
-        run: cd hamonize-connector/ && sudo dpkg-buildpackage -b -us -uc -ui
-      
-      - name: Bump version and push tag
-        id: tag_version
-        uses: mathieudutour/github-tag-action@v5.5
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          
-      - uses: octokit/request-action@v2.x
-        id: get_latest_release
-        with:
-          route: GET /repos/:repository/releases/${{ steps.tag_version.outputs.tag }}
-          repository: ${{ github.repository }}
-        env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: get upload url
-        id: get_upload_url
-        run: |
-          url=$(echo "$response" | jq -r '.upload_url')
-          echo "::set-output name=url::$url"
-        env: 
-          response:  ${{ steps.get_latest_release.outputs.data }}
-          
-          
-      - name: Upload Release Asset
-        id: upload-release-asset
+      - name: Upload Release Asset Connector
+        id: upload-release-asset-connector
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.get_upload_url.outputs.url }}
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./hamonize-connect_1.0.1_amd64.deb
           asset_name: hamonize-connect_1.0.1_amd64.deb
           asset_content_type: application/deb
+        
