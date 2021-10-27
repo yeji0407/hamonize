@@ -53,7 +53,7 @@ jobs:
           asset_content_type: application/deb
               
       - name: Build Hamonize-connect
-        run: cd hamonize-connect/ && sudo dpkg-buildpackage -b -us -uc -ui
+        run: cd hamonize-connector/ && sudo dpkg-buildpackage -b -us -uc -ui
         
       - name: Upload Release Asset Connector
         id: upload-release-asset-connector
