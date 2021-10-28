@@ -98,3 +98,36 @@ jobs:
           asset_path: ./hamonize-admin_${{ steps.tag_version.outputs.new_tag }}_debian11.deb
           asset_name: hamonize-admin_${{ steps.tag_version.outputs.new_tag }}_debian11.deb
           asset_content_type: application/deb
+
+      - name: Upload Release Asset Admin User
+        id: upload-release-asset-user-focal
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./hamonize-user_${{ steps.tag_version.outputs.new_tag }}_amd64.deb
+          asset_name: hamonize-user_${{ steps.tag_version.outputs.new_tag }}_amd64.deb
+          asset_content_type: application/deb
+          
+      - name: Upload Release Asset Admin User
+        id: upload-release-asset-user-gooroom
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./hamonize-user_${{ steps.tag_version.outputs.new_tag }}_gooroom.deb
+          asset_name: hamonize-user_${{ steps.tag_version.outputs.new_tag }}_gooroom.deb
+          asset_content_type: application/deb
+          
+      - name: Upload Release Asset Admin User
+        id: upload-release-asset-user-debian
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./hamonize-user_${{ steps.tag_version.outputs.new_tag }}_debian11.deb
+          asset_name: hamonize-user_${{ steps.tag_version.outputs.new_tag }}_debian11.deb
+          asset_content_type: application/deb
