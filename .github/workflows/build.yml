@@ -72,9 +72,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: recursive
-          
-#       - name: Install dependencies
-#         run: apt-get update -qq && apt-get install g++ make cmake qtbase5-dev qtbase5-dev-tools qttools5-dev qttools5-dev-tools libqca-qt5-2-plugins xorg-dev libxtst-dev libjpeg-dev zlib1g-dev libssl-dev libpam0g-dev libprocps-dev liblzo2-dev libqca-qt5-2-dev libldap2-dev libsasl2-dev
         
       - name: 3rd party check
         run: ls -R
@@ -91,3 +88,38 @@ jobs:
         with:
           name: hamonize-admin-${{matrix.dist}}
           path: ./hamonize-admin/build/hamonize-admin_*.deb
+
+  build-admin-user:
+    name: Build Hamonize-admin-user
+    strategy:
+      matrix:
+        dist:
+          - focal
+          - buster
+          - bullseye
+    runs-on: ubuntu-latest
+    container: hamonikr/hamonize-admin.${{matrix.dist}}
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+        
+      - name: 3rd party check
+        run: ls -R
+        
+      - name: Build Hamonize-admin-user
+        run: |
+          cd hamonize-admin/
+          mv postinst postinst_admin && mv postinst_user postinst
+          mv CMakeLists.txt CMakeLists_admin.txt && mv CMakeLists_user.txt CMakeLists.txt
+          mv cmake/CPackDefinitions.cmake cmake/CPackDefinitions_admin.cmake && mv cmake/CPackDefinitions_user.cmake cmake/CPackDefinitions.cmake
+          mkdir build && cd build
+          cmake -G Ninja -DCMAKE_BUILD_TYPE="Debug" -DCMAKE_INSTALL_PREFIX=/usr -DWITH_LTO="OFF" ..
+          fakeroot ninja package
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: hamonize-user-${{matrix.dist}}
+          path: ./hamonize-admin/build/hamonize-user_*.deb
