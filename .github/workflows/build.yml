@@ -76,10 +76,12 @@ jobs:
 #       - name: Install dependencies
 #         run: apt-get update -qq && apt-get install g++ make cmake qtbase5-dev qtbase5-dev-tools qttools5-dev qttools5-dev-tools libqca-qt5-2-plugins xorg-dev libxtst-dev libjpeg-dev zlib1g-dev libssl-dev libpam0g-dev libprocps-dev liblzo2-dev libqca-qt5-2-dev libldap2-dev libsasl2-dev
         
+      - name: 3rd party check
+        run: ls hamonize-admin/3rdparty/qthttpserver/src/3rdparty/http-parser/
+        
       - name: Build Hamonize-admin
         run: |
           cd hamonize-admin/
-          ls ./3rdparty/qthttpserver/src/3rdparty/http-parser/
           mkdir build && cd build
           cmake -G Ninja -DCMAKE_BUILD_TYPE="Debug" -DCMAKE_INSTALL_PREFIX=/usr -DWITH_LTO="OFF" ..
           fakeroot ninja package
