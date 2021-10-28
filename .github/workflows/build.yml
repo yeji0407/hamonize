@@ -62,11 +62,11 @@ jobs:
     strategy:
       matrix:
         dist:
-          - ubuntu.focal
-          - debian.buster
-          - debian.bullseye
+          - focal
+          - buster
+          - bullseye
     runs-on: ubuntu-latest
-    container: veyon/ci.linux.${{matrix.dist}}
+    container: hamonikr/hamonize-admin.${{matrix.dist}}
     steps:
       - name: Checkout sources
         uses: actions/checkout@v2
