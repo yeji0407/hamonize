@@ -40,7 +40,9 @@ jobs:
         run: |
             mv ./hamonize-agent/hamonize-agent*.deb ./hamonize-agent_${{ steps.tag_version.outputs.new_tag }}_amd64.deb
             mv ./hamonize-connect/hamonize-connect*.deb ./hamonize-connect_${{ steps.tag_version.outputs.new_tag }}_amd64.deb
-            mv ./hamonize-admin/hamonize-admin*.deb ./hamonize-admin_${{ steps.tag_version.outputs.new_tag }}_amd64.deb
+            mv ./hamonize-admin-ubuntu.focal/hamonize-admin*.deb ./hamonize-admin_${{ steps.tag_version.outputs.new_tag }}_amd64.deb
+            mv ./hamonize-admin-debian.buster/hamonize-admin*.deb ./hamonize-admin_${{ steps.tag_version.outputs.new_tag }}_gooroom.deb
+            mv ./hamonize-admin-debian.bullseye/hamonize-admin*.deb ./hamonize-admin_${{ steps.tag_version.outputs.new_tag }}_debian11.deb
           
       - name: Upload Release Asset Agent
         id: upload-release-asset-agent
@@ -65,7 +67,7 @@ jobs:
           asset_content_type: application/deb
           
       - name: Upload Release Asset Admin
-        id: upload-release-asset-admin
+        id: upload-release-asset-admin-focal
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -73,4 +75,26 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./hamonize-admin_${{ steps.tag_version.outputs.new_tag }}_amd64.deb
           asset_name: hamonize-admin_${{ steps.tag_version.outputs.new_tag }}_amd64.deb
+          asset_content_type: application/deb
+          
+      - name: Upload Release Asset Admin
+        id: upload-release-asset-admin-gooroom
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./hamonize-admin_${{ steps.tag_version.outputs.new_tag }}_gooroom.deb
+          asset_name: hamonize-admin_${{ steps.tag_version.outputs.new_tag }}_gooroom.deb
+          asset_content_type: application/deb
+          
+      - name: Upload Release Asset Admin
+        id: upload-release-asset-admin-debian
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./hamonize-admin_${{ steps.tag_version.outputs.new_tag }}_debian11.deb
+          asset_name: hamonize-admin_${{ steps.tag_version.outputs.new_tag }}_debian11.deb
           asset_content_type: application/deb
