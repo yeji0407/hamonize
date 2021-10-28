@@ -59,7 +59,14 @@ jobs:
 
   build-admin:
     name: Build Hamonize-admin
+    strategy:
+      matrix:
+        dist:
+          - ubuntu.focal
+          - debian.buster
+          - debian.bullseye
     runs-on: ubuntu-latest
+    container: veyon/ci.linux.${{matrix.dist}}
     steps:
       - name: Checkout sources
         uses: actions/checkout@v2
@@ -75,5 +82,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: hamonize-admin
+          name: hamonize-admin-${{matrix.dist}}
           path: ./hamonize-admin/build/hamonize-admin_*.deb
