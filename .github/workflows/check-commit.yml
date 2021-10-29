@@ -51,5 +51,3 @@ jobs:
               repo: context.repo.repo,
               body: '👋 Thanks for reporting!'
             })
-
-  
