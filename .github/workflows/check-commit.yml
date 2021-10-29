@@ -26,12 +26,30 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v2
         
-      - run: echo $PR_NUMBER > event_number.txt
-      - name: upload event number
-        uses: actions/upload-artifact@v2
-        with:
-          name: event-number
-          path: ./event_number.txt
+#       - run: echo $PR_NUMBER > event_number.txt
+#       - name: upload event number
+#         uses: actions/upload-artifact@v2
+#         with:
+#           name: event-number
+#           path: ./event_number.txt
 
       - name: Check commit 🧪
         uses: adityaa30/check-commit@master
+
+  run-if-fail:
+    if: ${{ always() && (needs.check.result=='failure') }}
+    needs: [check]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.issues.createComment({
+              issue_number: $PR_NUMBER,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '👋 Thanks for reporting!'
+            })
+
+  
