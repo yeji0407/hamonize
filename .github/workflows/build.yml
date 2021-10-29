@@ -73,9 +73,6 @@ jobs:
         with:
           submodules: recursive
         
-      - name: 3rd party check
-        run: ls -R
-        
       - name: Build Hamonize-admin
         run: |
           cd hamonize-admin/
@@ -105,9 +102,6 @@ jobs:
         with:
           submodules: recursive
         
-      - name: 3rd party check
-        run: ls -R
-        
       - name: Build Hamonize-admin-user
         run: |
           cd hamonize-admin/
@@ -123,3 +117,46 @@ jobs:
         with:
           name: hamonize-user-${{matrix.dist}}
           path: ./hamonize-admin/build/hamonize-user_*.deb
+
+  build-admin-win:
+    name: Build Hamonize-admin-win
+    runs-on: ubuntu-latest
+    container: hamonikr/hamonize-admin.win64
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+        
+      - name: Build Hamonize-admin-win
+        run: |          
+          mkdir /tmp/build-64 && cd /tmp/build-64
+          cmake /__w/hamonize/hamonize/hamonize-admin/ -DCMAKE_TOOLCHAIN_FILE=/__w/hamonize/hamonize/hamonize/hamonize-admin/cmake/modules/Win64Toolchain.cmake -DCMAKE_MODULE_PATH=/__w/hamonize/hamonize/hamonize/hamonize-admin/cmake/modules/
+          make windows-binaries
+          cd hamonize-win64-*
+          makeinsis hamonize.nsi
+          mv hamonize-*-win64-setup.exe ../
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: hamonize-admin-win
+          path: /tmp/build-64/hamonize-*-win64-setup.exe
+          
+      - name: Build Hamonize-admin-win-user
+        run: |     
+          cd hamonize-admin
+          mv CMakeLists.txt CMakeLists_admin.txt && mv CMakeLists_user.txt CMakeLists.txt
+          mkdir /tmp/build-64-user && cd /tmp/build-64-user
+          cmake /__w/hamonize/hamonize/hamonize-admin/ -DCMAKE_TOOLCHAIN_FILE=/__w/hamonize/hamonize/hamonize/hamonize-admin/cmake/modules/Win64Toolchain.cmake -DCMAKE_MODULE_PATH=/__w/hamonize/hamonize/hamonize/hamonize-admin/cmake/modules/
+          make windows-binaries
+          cd hamonize-win64-*
+          makeinsis hamonize.nsi
+          mv hamonize-*-win64-setup.exe ../
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: hamonize-user-win
+          path: /tmp/build-64-user/hamonize-*-win64-setup.exe
+          
