@@ -11,4 +11,3 @@ jobs:
 
       - name: Check commit 🧪
         uses: adityaa30/check-commit@master
-
