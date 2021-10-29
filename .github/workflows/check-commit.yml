@@ -9,7 +9,7 @@ on:
       - synchronize
   pull_request_target:
     types:
-      - opend
+      - opened
       - edited
       - reopened
       - synchronize
