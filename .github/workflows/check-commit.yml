@@ -1,6 +1,21 @@
 name: Check Commit Message
 
-on: [pull_request, push]
+on: 
+  pull_request:
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+  pull_request_target:
+    types:
+      - opend
+      - edited
+      - reopened
+      - synchronize
+  push:
+    branches:
+      - master
 
 jobs:
   check:
@@ -11,3 +26,4 @@ jobs:
 
       - name: Check commit 🧪
         uses: adityaa30/check-commit@master
+
