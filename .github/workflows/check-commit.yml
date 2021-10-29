@@ -40,25 +40,27 @@ jobs:
     if: ${{ always() && (needs.check.result=='failure') }}
     needs: [check]
     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/github-script@v3
-#         with:
-#           github-token: ${{secrets.GITHUB_TOKEN}}
-#           script: |
-#             github.issues.createComment({
-#               issue_number: $PR_NUMBER,
-#               owner: context.repo.owner,
-#               repo: context.repo.repo,
-#               body: '👋 Thanks for reporting!'
-#             })
+    env: 
+      PR_NUMBER: ${{ github.event.number }}
     steps:
-      - name: comment PR
-        uses: unsplash/comment-on-pr@v1.3.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/github-script@v3
         with:
-          msg: "Check out this message!"
-          check_for_duplicate_msg: false  # OPTIONAL
-          delete_prev_regex_msg: "[0-9]"  # OPTIONAL
-          duplicate_msg_pattern: "[A-Z]"  # OPTIONAL
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.issues.createComment({
+              issue_number: $PR_NUMBER,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '👋 Thanks for reporting!'
+            })
+#     steps:
+#       - name: comment PR
+#         uses: unsplash/comment-on-pr@v1.3.0
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         with:
+#           msg: "Check out this message!"
+#           check_for_duplicate_msg: false  # OPTIONAL
+#           delete_prev_regex_msg: "[0-9]"  # OPTIONAL
+#           duplicate_msg_pattern: "[A-Z]"  # OPTIONAL
   
