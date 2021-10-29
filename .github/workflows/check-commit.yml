@@ -20,8 +20,6 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
-    env: 
-      PR_NUMBER: ${{ github.event.number }}
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v2
@@ -44,6 +42,8 @@ jobs:
               issue_number: ${{ env.PR_NUMBER }},
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '요청해 주신 PR의 커밋 메시지가 [하모나이즈 프로젝트의 커밋 컨벤션](https://github.com/hamonikr/hamonize/blob/master/.gitmessage.txt)을 위반합니다. 프로젝트의 커밋 컨벤션을 준수해 주세요.'
+              body: '요청해 주신 PR의 커밋 메시지가 [하모나이즈 프로젝트의 커밋 컨벤션](https://github.com/hamonikr/hamonize/blob/master/.gitmessage.txt)을 위반합니다.
+                    프로젝트의 커밋 컨벤션을 준수해 주세요.
+                    커밋 컨벤션에 대한 보다 자세한 사항은 [해당 링크](http://karma-runner.github.io/latest/dev/git-commit-msg.html)를 참고하세요.'
             })
  
