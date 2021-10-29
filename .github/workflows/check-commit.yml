@@ -9,7 +9,7 @@ on:
       - synchronize
   pull_request_target:
     types:
-      - opend
+      - opened
       - edited
       - reopened
       - synchronize
@@ -20,10 +20,18 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
+    env: 
+      PR_NUMBER: ${{ github.event.number }}
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v2
+        
+      - run: echo $PR_NUMBER > event_number.txt
+      - name: upload event number
+        uses: actions/upload-artifact@v2
+        with:
+          name: event-number
+          path: ./event_number.txt
 
       - name: Check commit 🧪
         uses: adityaa30/check-commit@master
-
