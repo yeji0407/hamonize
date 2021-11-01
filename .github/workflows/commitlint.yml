@@ -28,3 +28,4 @@ jobs:
           fetch-depth: 30 # Its fine to lint last 30 commits only
       - run: yarn add @commitlint/config-conventional
       - uses: wagoid/commitlint-github-action@v1
+
