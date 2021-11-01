@@ -27,15 +27,6 @@ jobs:
           pattern: '\<(Feat|Fix|Design|Style|Refactor|Comment|Docs|Test|Chore|Rename|Remove)\> .+$'
           flags: 'gm'
           error: 'Your first line has to contain a commit type like "<Fix>".'
-      - name: Check Line Length
-        uses: gsactions/commit-message-checker@v1
-        with:
-          pattern: '^[^#].{150}'
-          error: 'The maximum line length of 150 characters is exceeded.'
-          excludeDescription: 'true' # optional: this excludes the description body of a pull request
-          excludeTitle: 'true' # optional: this excludes the title of a pull request
-          checkAllCommitMessages: 'true' # optional: this checks all commits associated with a pull request
-          accessToken: ${{ secrets.GITHUB_TOKEN }} # github access token is only required if checkAllCommitMessages is true
       - name: Check for Resolves / Fixes
         uses: gsactions/commit-message-checker@v1
         with:
