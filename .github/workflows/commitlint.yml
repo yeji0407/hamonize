@@ -23,6 +23,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 1 # Its fine to lint last 1 commits only
+          fetch-depth: 30 # Its fine to lint last 30 commits only
       - uses: wagoid/commitlint-github-action@v4
     
