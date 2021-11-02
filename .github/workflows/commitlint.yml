@@ -20,7 +20,7 @@ jobs:
 #           fetch-depth: 30 # Its fine to lint last 30 commits only
 #       - uses: wagoid/commitlint-github-action@v4
       - run: |
-          npm install @commitlint/config-conventional @commitlint/cli
+          npm install @commitlint/{config-conventional,cli,prompt-cli}
           echo 'module.exports = { extends: ["@commitlint/config-conventional"]  };' > /home/runner/work/hamonize/hamonize/commitlint.config.js
       - uses: JulienKode/pull-request-name-linter-action@v0.2.0
   lint-commits:
