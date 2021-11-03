@@ -39,6 +39,7 @@ jobs:
           
       - name: Rename Package
         run: |
+            mkdir assets
             mv ./hamonize-agent/hamonize-agent*.deb ./assets/hamonize-agent_${{ steps.tag_version.outputs.new_version }}_amd64.deb
             mv ./hamonize-connect/hamonize-connect*.deb ./assets/hamonize-connect_${{ steps.tag_version.outputs.new_version }}_amd64.deb
             mv ./hamonize-admin-focal/hamonize-admin*.deb ./assets/hamonize-admin_${{ steps.tag_version.outputs.new_version }}_amd64.deb
