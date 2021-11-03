@@ -71,7 +71,7 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v2
         with:
-          submodules: recursive
+          with: submodules
         
       - name: Build Hamonize-admin
         run: |
