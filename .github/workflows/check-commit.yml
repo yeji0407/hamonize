@@ -32,7 +32,7 @@ jobs:
       - name: Check for Issue number
         uses: gsactions/commit-message-checker@v1
         with:
-          pattern: '^.+(issue) \#[0-9]+$'
+          pattern: '^.+(issue) \#([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])+$'
           checkAllCommitMessages: 'true' # optional: this checks all commits associated with a pull request
           accessToken: ${{ secrets.GITHUB_TOKEN }} # github access token is only required if checkAllCommitMessages is true
           error: 'You need at least one "issue #<issue number>" line.'
