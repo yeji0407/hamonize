@@ -154,7 +154,7 @@ jobs:
           cmake /hamonize/hamonize-admin/ -DCMAKE_TOOLCHAIN_FILE=/hamonize/hamonize-admin/cmake/modules/Win64Toolchain.cmake -DCMAKE_MODULE_PATH=/hamonize/hamonize-admin/cmake/modules/
           make windows-binaries
           cd hamonize-win64-*
-          makeinsis hamonize.nsi
+          makensis hamonize.nsi
           mv hamonize-*-win64-setup.exe ../
       
       - name: Upload artifact
