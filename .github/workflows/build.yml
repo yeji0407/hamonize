@@ -71,7 +71,7 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v2
         with:
-          with: submodules
+          submodules: recursive
         
       - name: Build Hamonize-admin
         run: |
@@ -124,9 +124,12 @@ jobs:
     container: hamonikr/hamonize-admin.win64
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v2
-        with:
-          submodules: recursive
+#         uses: actions/checkout@v2
+#         with:
+#           submodules: recursive
+        run: |
+          cd /__w/hamonize/
+          git clone -b master --recursive https://github.com/hamonikr/hamonize.git
         
       - name: Build Hamonize-admin-win
         run: |          
