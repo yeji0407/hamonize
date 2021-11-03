@@ -32,8 +32,8 @@ jobs:
         with:
           tag_name: ${{ steps.tag_version.outputs.new_tag }}
           release_name: Hamonize ${{ steps.tag_version.outputs.new_tag }}
-#           body: ${{ steps.tag_version.outputs.changelog }}
-          body: ${{ github.event.head_commit.message }}
+          body: ${{ steps.tag_version.outputs.changelog }}
+#           body: ${{ github.event.head_commit.message }}
           draft: false
           prerelease: false
           
