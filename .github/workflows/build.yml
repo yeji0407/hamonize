@@ -128,13 +128,13 @@ jobs:
 #         with:
 #           submodules: recursive
         run: |
-          cd /__w/hamonize/
+          cd /
           git clone -b master --recursive https://github.com/hamonikr/hamonize.git
         
       - name: Build Hamonize-admin-win
         run: |          
           mkdir /tmp/build-64 && cd /tmp/build-64
-          cmake /__w/hamonize/hamonize/hamonize-admin/ -DCMAKE_TOOLCHAIN_FILE=/__w/hamonize/hamonize/hamonize/hamonize-admin/cmake/modules/Win64Toolchain.cmake -DCMAKE_MODULE_PATH=/__w/hamonize/hamonize/hamonize/hamonize-admin/cmake/modules/
+          cmake /hamonize/hamonize-admin/ -DCMAKE_TOOLCHAIN_FILE=/hamonize/hamonize-admin/cmake/modules/Win64Toolchain.cmake -DCMAKE_MODULE_PATH=/hamonize/hamonize-admin/cmake/modules/
           make windows-binaries
           cd hamonize-win64-*
           makeinsis hamonize.nsi
@@ -148,10 +148,10 @@ jobs:
           
       - name: Build Hamonize-admin-win-user
         run: |     
-          cd hamonize-admin
+          cd /hamonize/hamonize-admin
           mv CMakeLists.txt CMakeLists_admin.txt && mv CMakeLists_user.txt CMakeLists.txt
           mkdir /tmp/build-64-user && cd /tmp/build-64-user
-          cmake /__w/hamonize/hamonize/hamonize-admin/ -DCMAKE_TOOLCHAIN_FILE=/__w/hamonize/hamonize/hamonize/hamonize-admin/cmake/modules/Win64Toolchain.cmake -DCMAKE_MODULE_PATH=/__w/hamonize/hamonize/hamonize/hamonize-admin/cmake/modules/
+          cmake /hamonize/hamonize-admin/ -DCMAKE_TOOLCHAIN_FILE=/hamonize/hamonize-admin/cmake/modules/Win64Toolchain.cmake -DCMAKE_MODULE_PATH=/hamonize/hamonize-admin/cmake/modules/
           make windows-binaries
           cd hamonize-win64-*
           makeinsis hamonize.nsi
