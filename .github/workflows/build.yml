@@ -150,6 +150,7 @@ jobs:
         run: |     
           cd /hamonize/hamonize-admin
           mv CMakeLists.txt CMakeLists_admin.txt && mv CMakeLists_user.txt CMakeLists.txt
+          mv nsis/hamonize.nsi.in nsis/hamonize_admin.nsi.in && mv nsis/hamonize_user.nsi.in nsis/hamonize.nsi.in
           mkdir /tmp/build-64-user && cd /tmp/build-64-user
           cmake /hamonize/hamonize-admin/ -DCMAKE_TOOLCHAIN_FILE=/hamonize/hamonize-admin/cmake/modules/Win64Toolchain.cmake -DCMAKE_MODULE_PATH=/hamonize/hamonize-admin/cmake/modules/
           make windows-binaries
