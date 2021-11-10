@@ -169,7 +169,7 @@
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>2.6</version>
+			<version>2.7</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
@@ -247,7 +247,17 @@
 			<artifactId>spring-ldap-core</artifactId>
 			<version>2.3.1.RELEASE</version>
 		</dependency>
-
+		<!-- XssFilter -->
+		<dependency>
+			<groupId>com.navercorp.lucy</groupId>
+			<artifactId>lucy-xss</artifactId>
+			<version>1.6.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.navercorp.lucy</groupId>
+			<artifactId>lucy-xss-servlet</artifactId>
+			<version>2.0.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>

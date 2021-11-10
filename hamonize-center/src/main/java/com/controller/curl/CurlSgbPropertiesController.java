@@ -2,6 +2,7 @@ package com.controller.curl;
 
 import java.io.BufferedReader;
 import java.util.List;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,7 +33,6 @@ public class CurlSgbPropertiesController {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-
 	@RequestMapping(value = "/sgbprt", method = RequestMethod.POST)
 	public String getAgentJob(HttpServletRequest request) throws Exception {
 
@@ -42,20 +42,18 @@ public class CurlSgbPropertiesController {
 		JSONObject jsonList = new JSONObject();
 		JSONArray itemList = new JSONArray();
 
-
 		StringBuffer json = new StringBuffer();
 		String line = null;
 
 		try {
 			BufferedReader reader = request.getReader();
-			while ((line = reader.readLine()) != null) {
+			while ( !Objects.isNull(line = reader.readLine()) ) {
 				json.append(line);
 			}
-
+			reader.close();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
-
 
 		JSONParser jsonParser = new JSONParser();
 		JSONObject jsonObj = (JSONObject) jsonParser.parse(json.toString());
@@ -64,13 +62,9 @@ public class CurlSgbPropertiesController {
 
 		logger.debug("====> {}", object.get("uuid").toString());
 
-
 		List<SvrlstVo> svrlstVo = svrlstMapper.getSvrlstDataList();
 
-
 		for (SvrlstVo svrlstData : svrlstVo) {
-			System.out.println("svrlstData===>==" + svrlstData.getSvr_port() + "=="
-					+ svrlstData.getSvr_domain() + "==" + svrlstData.getSvr_ip());
 
 			JSONObject tmpObject = new JSONObject();
 
@@ -83,21 +77,15 @@ public class CurlSgbPropertiesController {
 				tmpObject.put("sgbip", svrlstData.getSvr_ip() + ":" + svrlstData.getSvr_port());
 			}
 
-
 			itemList.add(tmpObject);
 		}
 		jsonObject.put("sgbdata", itemList);
 
 		output = jsonObject.toJSONString();
 
-		System.out.println("//===================================");
-		System.out.println("//result data is : " + output);
-		System.out.println("//===================================");
 
 		return output;
 	}
-
-
 
 	public int deptUUID(String uuid) {
 		GetAgentJobVo agentVo = new GetAgentJobVo();

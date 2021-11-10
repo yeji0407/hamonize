@@ -1,11 +1,21 @@
 # Hamonize-Connector
 
+
 ### Hamonize-Connector?
 
 하모나이즈 커넥터는 원격지에서 다수의 PC를 관리하는데 필요한 기능들을 설치해주는 프로그램입니다
 
 
 <br>
+
+### 사용법
+
+<img width="500" src="../img/connector_main.png">
+<br>
+
+ 자세한 내용은 [사용자 매뉴얼](http://team.hamonikr.org:18090/pages/viewpage.action?pageId=18415777) 을 참고하세요
+ 
+ <br>
 
 ###  Usage
 

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -206,10 +207,11 @@ public class CurlController {
 
 		try {
 			BufferedReader reader = request.getReader();
-			while ((line = reader.readLine()) != null) {
+//			while ((line = reader.readLine()) != null) {
+			while ( !Objects.isNull(line = reader.readLine()) ) {
 				json.append(line);
 			}
-
+			reader.close();
 		} catch (Exception e) {
 			logger.error("Error reading JSON string: {}", e.getMessage(), e);
 			throw e;
@@ -291,6 +293,7 @@ public class CurlController {
 	}
 
 	@PostMapping("/setVpnUpdate")
+	@ResponseBody
 	public Boolean setVpnUpdate(@RequestBody String retData, HttpServletRequest request) {
 
 		StringBuffer json = new StringBuffer();
@@ -308,9 +311,7 @@ public class CurlController {
 				JSONObject tempObj = (JSONObject) hmdArray.get(i);
 
 				logger.debug("tempObj.get(\"uuid\").toString()=== {}", tempObj.get("uuid").toString());
-
 				logger.debug("tempObj.get(\"vpnipaddr\").toString()==={}", tempObj.get("vpnipaddr").toString());
-
 				hdVo.setPc_uuid(tempObj.get("uuid").toString());
 				hdVo.setPc_vpnip(tempObj.get("vpnipaddr").toString());
 				hdVo.setPc_hostname(tempObj.get("hostname").toString());
@@ -318,6 +319,7 @@ public class CurlController {
 			}
 
 			retVal = pcMangrMapper.updateVpnInfo(hdVo);
+			
 
 		} catch (Exception e) {
 
@@ -445,11 +447,11 @@ public class CurlController {
 
 		try {
 			BufferedReader reader = request.getReader();
-			while ((line = reader.readLine()) != null) {
+			while ( !Objects.isNull(line = reader.readLine()) ) {
 				logger.debug("line===> {}", line);
 				json.append(line);
 			}
-
+			reader.close();
 		} catch (Exception e) {
 			logger.error("Error reading JSON string: {}", e.toString());
 		}
