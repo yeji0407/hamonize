@@ -1,0 +1,115 @@
+var log = require('../logger');
+const fs = require('fs');
+var http = require('http');
+
+let networkChk = async function () {
+	console.log('ddddddds')
+
+	var ping = require('ping');
+	var ip = require("ip");
+	var ipAliveStatus = false;
+	var hosts = ['google.com'];
+	let res = "";
+	for (let host of hosts) {
+		res = await ping.promise.probe(host);
+
+	}
+	return res.alive
+};
+
+function getPollTime() {
+	log.info("----getPollTime Func start----");
+	var uuid = fs.readFileSync('/etc/hamonize/uuid', 'utf8');
+	var centerUrl = "";
+	var array = fs.readFileSync('/etc/hamonize/propertiesJob/propertiesInfo.hm').toString().split("\n");
+	for (i in array) {
+		if (array[i].indexOf("CENTERURL") != -1) {
+			var centerData = array[i].split("=");
+			centerUrl = centerData[1];
+		}
+	}
+	var DEFAUT_POLLTIME = 10000; //10s
+
+	var setUrl = "http://" + centerUrl + "/getAgent/setPollTime?uuid=" + uuid + "&&name=hamonize-agent";
+	console.log(setUrl);
+
+	var retval = 0;
+
+	networkChk().then(
+		(value) => {
+			console.log(value)
+			if (value) {
+				http.get(setUrl, (res) => {
+					res.on('data', (data) => {
+						var pollingObj = JSON.parse(data);
+
+						if (pollingObj.data != 'nodata') {
+							var pollingObj = JSON.parse(data);
+							log.info("//====================================");
+							log.info("//== Polling time has changed... " + pollingObj.data);
+							log.info("//====================================");
+
+							retval = pollingObj.data * 1000;
+							log.info("//== Polling time has result... " + retval);
+							// Polling(retval);
+							console.log('aaaaaaaaaaaaaaaaaaaaaa')
+							return retval;
+
+						} else {
+							console.log('ccccccccccccccccccccc')
+							return DEFAUT_POLLTIME;
+							log.info("//== Polling time doesn't changes..");
+						}
+					});
+				});
+			} else {
+				log.info("network close~");
+				retval = 10000;
+				console.log('bbbbbbbbbbbbbbbbb')
+				return retval;
+			}
+		}
+
+	);
+}
+
+
+function test() {
+	var uuid = fs.readFileSync('/etc/hamonize/uuid', 'utf8');
+	var centerUrl = "";
+	var array = fs.readFileSync('/etc/hamonize/propertiesJob/propertiesInfo.hm').toString().split("\n");
+	for (i in array) {
+		if (array[i].indexOf("CENTERURL") != -1) {
+			var centerData = array[i].split("=");
+			centerUrl = centerData[1];
+		}
+	}
+	var DEFAUT_POLLTIME = 10000; //10s
+
+	var setUrl = "http://" + centerUrl + "/getAgent/setPollTime?uuid=" + uuid + "&&name=hamonize-agent";
+	
+	http.get(setUrl, (res) => {
+		res.on('data', (data) => {
+			var pollingObj = JSON.parse(data);
+
+			if (pollingObj.data != 'nodata') {
+				var pollingObj = JSON.parse(data);
+				log.info("//====================================");
+				log.info("//== Polling time has changed... " + pollingObj.data);
+				log.info("//====================================");
+
+				retval = pollingObj.data * 1000;
+				log.info("//== Polling time has result... " + retval);
+				// Polling(retval);
+				console.log('aaaaaaaaaaaaaaaaaaaaaa')
+				return retval;
+
+			} else {
+				console.log('ccccccccccccccccccccc')
+				return DEFAUT_POLLTIME;
+				log.info("//== Polling time doesn't changes..");
+			}
+		});
+	});
+}
+module.exports = test;

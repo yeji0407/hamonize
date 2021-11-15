@@ -1,0 +1,7 @@
+
+describe('Test main', () => {
+    const test = require('./getPollTime');
+    test('getPollTime function', async() => {
+        expect(test()).toBeOneOf([10000, 60000, 300000, 600000, 1800000, 3600000]);
+    });
+ });
