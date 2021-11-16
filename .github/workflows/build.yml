@@ -8,6 +8,7 @@ on:
       - 'hamonize-connector/src/shell/*.sh'
       - 'hamonize-admin/**'
       - '!hamonize-admin/**.md'
+      - '!hamonize-admin/COPYING'
 jobs:          
   build-agent:
     name: Build Hamonize-agent
