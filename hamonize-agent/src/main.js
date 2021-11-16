@@ -1345,3 +1345,8 @@ const sysInfo = async () => {
 // 			console.log("\loginInfoAction      .body===" + response.body);
 // 		});
 // }
+
+module.exports = {
+	FnHwInfoMkdir,
+	FnProgrmMkdir
+}
