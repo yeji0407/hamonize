@@ -6,9 +6,8 @@ on:
       - '**.js'
       - 'hamonize-agent/src/shell/*.sh'
       - 'hamonize-connector/src/shell/*.sh'
-      - 'hamonize-admin/*'
-    paths-ignore:
-      - '*.md'
+      - 'hamonize-admin/**'
+      - '!hamonize-admin/**.md'
 jobs:          
   build-agent:
     name: Build Hamonize-agent
